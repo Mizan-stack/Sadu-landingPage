@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+body {
+  font-family: "TS Zunburk", "IBM Plex Sans Arabic", Tajawal, sans-serif;
+}

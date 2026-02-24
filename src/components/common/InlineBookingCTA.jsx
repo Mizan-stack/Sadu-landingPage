@@ -5,7 +5,19 @@ export default function InlineBookingCTA({
   label,
   labelClassName,
   onClick,
+  href,
+  target,
+  rel,
 }) {
+  if (href) {
+    return (
+      <a className={buttonClassName} href={href} target={target} rel={rel}>
+        <img src={iconSrc} alt="" className={iconClassName} />
+        <span className={labelClassName}>{label}</span>
+      </a>
+    );
+  }
+
   return (
     <button className={buttonClassName} onClick={onClick}>
       <img src={iconSrc} alt="" className={iconClassName} />

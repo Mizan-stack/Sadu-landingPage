@@ -1,0 +1,11 @@
+﻿@font-face {
+  font-family: "TS Zunburk";
+  src: url("../assets/fonts/TSZunburkVF2VF.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.test-font-check {
+  font-family: "TS Zunburk" !important;
+}

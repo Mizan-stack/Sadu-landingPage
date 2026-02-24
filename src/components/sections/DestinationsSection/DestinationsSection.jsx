@@ -31,6 +31,10 @@ export default function DestinationsSection() {
     setActiveIndex((prev) => (prev + 1) % cards.length);
   };
 
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev - 1 + cards.length) % cards.length);
+  };
+
   return (
     <section
       id="destinations"
@@ -77,10 +81,11 @@ export default function DestinationsSection() {
               {/* drag circle */}
               <motion.div
                 drag="x"
-                dragConstraints={{ left: -140, right: 0 }}
-                dragElastic={0.25}
+                dragConstraints={{ left: -140, right: 140 }}
+                dragElastic={0.35}
                 onDragEnd={(e, info) => {
                   if (info.offset.x < -60) handleNext();
+                  if (info.offset.x > 60) handlePrev();
                 }}
                 className="absolute right-1/2 top-1/2 translate-x-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
               >
@@ -136,10 +141,11 @@ export default function DestinationsSection() {
                   {isActive && (
                     <motion.div
                       drag="x"
-                      dragConstraints={{ left: -120, right: 0 }}
-                      dragElastic={0.2}
+                      dragConstraints={{ left: -120, right: 120 }}
+                      dragElastic={0.3}
                       onDragEnd={(e, info) => {
                         if (info.offset.x < -60) handleNext();
+                        if (info.offset.x > 60) handlePrev();
                       }}
                       className="absolute right-6 top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
                     >

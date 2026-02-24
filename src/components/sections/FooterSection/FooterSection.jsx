@@ -3,12 +3,13 @@ import { motion } from "framer-motion";
 import InlineBookingCTA from "../../common/InlineBookingCTA";
 import footerBg from "../../../assets/images/bg-11.png";
 import bookingIcon from "../../../assets/icons/booking-1.png";
+import { BOOKING_URL, UNIFIED_PHONE_NUMBER } from "../../../constants/siteConfig";
 
 export default function FooterSection() {
   return (
     <footer id="contact" dir="rtl" className="w-full overflow-hidden bg-[#E9DFD2]">
       {/* ===== HERO AREA ===== */}
-      <div className="relative h-[620px] w-full overflow-hidden">
+      <div id="start-story" className="relative h-[620px] w-full overflow-hidden">
         {/* background image */}
         <motion.img
           src={footerBg}
@@ -54,6 +55,9 @@ export default function FooterSection() {
               iconClassName="h-[18px] w-auto transition duration-300 group-hover:translate-x-[-4px]"
               label="احجز الآن"
               labelClassName="text-[16px]"
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
             />
           </motion.div>
         </div>
@@ -65,7 +69,7 @@ export default function FooterSection() {
         <span>2026 © جميع الحقوق محفوظة سدو بوتيك</span>
 
         {/* right number */}
-        <span>16201</span>
+        <span>{UNIFIED_PHONE_NUMBER}</span>
       </div>
     </footer>
   );

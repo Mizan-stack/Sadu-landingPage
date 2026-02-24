@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
 
-import InlineBookingCTA from "../../common/InlineBookingCTA";
 import mainImage from "../../../assets/images/bg-9.png";
 import patternBg from "../../../assets/images/bg-3.png";
-import bookingIcon from "../../../assets/icons/booking-1.png";
 
 export default function IdentitySection() {
   return (
@@ -141,12 +139,7 @@ export default function IdentitySection() {
               جودة الإقامة.
             </p>
 
-            <InlineBookingCTA
-              iconSrc={bookingIcon}
-              iconClassName="h-[16px] sm:h-[18px] w-auto transition duration-300 group-hover:-translate-x-1"
-              label="احجز الآن"
-              labelClassName="text-[14px] sm:text-[16px]"
-            />
+            <div className="h-[24px]" aria-hidden />
           </motion.div>
         </div>
       </div>

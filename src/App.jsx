@@ -7,7 +7,7 @@ function App() {
     <BrowserRouter>
       <div
         dir="rtl"
-        className="[font-family:Tajawal,sans-serif] bg-black text-white"
+        className="bg-black text-white"
       >
         <MainLayout />
       </div>

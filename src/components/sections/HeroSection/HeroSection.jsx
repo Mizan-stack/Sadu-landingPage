@@ -2,13 +2,17 @@
 import { useState, useEffect } from "react";
 
 import heroImage from "../../../assets/images/hero.png";
+import heroImage2 from "../../../assets/images/bg-10.png";
+import heroImage3 from "../../../assets/images/bg-11.png";
 
-const slides = [heroImage, heroImage, heroImage];
+const heroSlides = [heroImage, heroImage2, heroImage3];
+const slides = [...new Set(heroSlides.filter(Boolean))];
+const fallbackSlides = slides.length > 0 ? slides : [heroImage];
 
 const stats = [
   { value: "24/7", label: "خدمة ضيوف مخصصة" },
-  { value: "85", label: "غرفة وجناح" },
-  { value: "4", label: "وجهة بوتيكية" },
+  { value: "233+", label: "غرفة وجناح" },
+  { value: "5", label: "وجهة بوتيكية" },
 ];
 
 export default function HeroSection() {
@@ -17,13 +21,14 @@ export default function HeroSection() {
   // autoplay
   useEffect(() => {
     const id = setInterval(() => {
-      setIndex((prev) => (prev + 1) % slides.length);
+      setIndex((prev) => (prev + 1) % fallbackSlides.length);
     }, 4000);
     return () => clearInterval(id);
   }, []);
 
-  const next = () => setIndex((p) => (p + 1) % slides.length);
-  const prev = () => setIndex((p) => (p - 1 + slides.length) % slides.length);
+  const next = () => setIndex((p) => (p + 1) % fallbackSlides.length);
+  const prev = () =>
+    setIndex((p) => (p - 1 + fallbackSlides.length) % fallbackSlides.length);
 
   return (
     <section
@@ -34,7 +39,7 @@ export default function HeroSection() {
       {/* BG */}
       <motion.img
         key={index}
-        src={slides[index]}
+        src={fallbackSlides[index]}
         alt=""
         aria-hidden
         className="absolute inset-0 z-[1] h-full w-full object-cover"
@@ -56,7 +61,7 @@ export default function HeroSection() {
             transition={{ duration: 1 }}
             className="ml-auto w-full max-w-[820px] text-right"
           >
-            <h1 className="[font-family:'TS_Zunburk_VF2','IBM_Plex_Sans_Arabic',Tajawal,sans-serif] text-[34px] leading-[1.35] sm:text-[44px] md:text-[80px] lg:text-[80px] font-medium text-[#F3E8DA]">
+            <h1 className="test-font-check [font-family:'TS_Zunburk_VF2','IBM_Plex_Sans_Arabic',Tajawal,sans-serif] text-[34px] leading-[1.35] sm:text-[44px] md:text-[80px] lg:text-[80px] font-medium text-[#F3E8DA]">
               <span className="block">اختبر الرفاهية كما</span>
               <span className="block">يجب أن تكون</span>
             </h1>
@@ -86,7 +91,7 @@ export default function HeroSection() {
                 </button>
 
                 <div className="flex items-center gap-2 sm:gap-3">
-                  {slides.map((img, i) => (
+                  {fallbackSlides.map((img, i) => (
                     <img
                       key={i}
                       src={img}
@@ -115,7 +120,7 @@ export default function HeroSection() {
       <div className="pointer-events-none absolute bottom-[120px] left-[20px] sm:left-[60px] z-[4]">
         <div className="relative w-[140px] sm:w-[200px] overflow-hidden border border-white/25 bg-black/25 backdrop-blur-sm shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
           <img
-            src={slides[index]}
+            src={fallbackSlides[index]}
             alt=""
             className="h-[100px] sm:h-[130px] w-full object-cover opacity-85"
           />

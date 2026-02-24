@@ -6,16 +6,20 @@ import PageContainer from "../common/PageContainer";
 import bookingIcon from "../../assets/icons/booking.png";
 import bookingIconAlt from "../../assets/icons/booking-1.png";
 import mainTitleLogo from "../../assets/icons/main-title.png";
+import mainTitleSidebar from "../../assets/icons/main-title-3.png";
 import menuIcon from "../../assets/icons/menu.png";
 import phoneIcon from "../../assets/icons/phone.png";
+import { BOOKING_URL, UNIFIED_PHONE_NUMBER } from "../../constants/siteConfig";
 
 const sections = [
   { id: "hero", label: "الرئيسية" },
   { id: "experience", label: "التجربة" },
   { id: "destinations", label: "الوجهات" },
   { id: "heritage", label: "الثقافة" },
+  { id: "start-story", label: "الحجوزات" },
   { id: "contact", label: "تواصل معنا", route: "/contact" },
 ];
+const PENDING_SCROLL_SECTION_KEY = "pending-scroll-section";
 
 export default function NavBar() {
   const location = useLocation();
@@ -42,6 +46,19 @@ export default function NavBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isHome]);
 
+  useEffect(() => {
+    if (!isHome) return;
+    const pendingSection = window.sessionStorage.getItem(
+      PENDING_SCROLL_SECTION_KEY,
+    );
+    if (!pendingSection) return;
+    window.sessionStorage.removeItem(PENDING_SCROLL_SECTION_KEY);
+    window.requestAnimationFrame(() => {
+      const el = document.getElementById(pendingSection);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    });
+  }, [isHome, location.pathname]);
+
   const goToSection = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -49,6 +66,17 @@ export default function NavBar() {
   };
 
   const handleSidebarNavigation = (sec) => {
+    if (sec.id === "start-story") {
+      setMenuOpen(false);
+      if (isHome) {
+        goToSection(sec.id);
+      } else {
+        window.sessionStorage.setItem(PENDING_SCROLL_SECTION_KEY, sec.id);
+        navigate("/");
+      }
+      return;
+    }
+
     if (sec.route) {
       setMenuOpen(false);
       navigate(sec.route);
@@ -65,10 +93,15 @@ export default function NavBar() {
         <PageContainer className="mx-auto max-w-[1320px] px-4 sm:px-6">
           <div className="flex min-h-[80px] items-center justify-between text-white">
             {/* RIGHT */}
-            <div className="hidden sm:flex items-center gap-3">
+            <a
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-3"
+            >
               <span>احجز الآن</span>
               <img src={bookingIconAlt} className="h-5 invert" />
-            </div>
+            </a>
 
             {/* CENTER */}
             <Link to="/">
@@ -113,7 +146,7 @@ export default function NavBar() {
               className="fixed right-0 top-0 z-[100] h-full w-full sm:w-[420px] bg-[#E9DFD2] shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between p-6 border-b border-[#7A1E2C]/10">
-                <img src={mainTitleLogo} className="w-[140px]" />
+                <img src={mainTitleSidebar} className="w-[140px]" />
                 <button
                   onClick={() => setMenuOpen(false)}
                   className="text-[#7A1E2C] text-2xl"
@@ -166,7 +199,7 @@ export default function NavBar() {
 
               <div className="hidden sm:flex items-center gap-3">
                 <img src={phoneIcon} className="h-5" />
-                <span>16201</span>
+                <span>{UNIFIED_PHONE_NUMBER}</span>
               </div>
             </div>
 
@@ -178,13 +211,15 @@ export default function NavBar() {
             />
 
             {/* RIGHT */}
-            <Link
-              to="/contact"
+            <a
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden sm:flex items-center gap-3 text-white"
             >
               <span>احجز الآن</span>
               <img src={bookingIcon} className="h-5" />
-            </Link>
+            </a>
 
             {/* MOBILE LOGO */}
             <img

@@ -1,11 +1,9 @@
 import { motion } from "framer-motion";
 import FloatingImagePair from "../../common/FloatingImagePair";
-import InlineBookingCTA from "../../common/InlineBookingCTA";
 import PageContainer from "../../common/PageContainer";
 import TopFrameOrnament from "../../common/TopFrameOrnament";
 import titleIcon from "../../../assets/icons/main-title-2.png";
 import topFrame from "../../../assets/icons/fram.png";
-import bookingIcon from "../../../assets/icons/booking-1.png";
 import bgMain from "../../../assets/images/bg-1.png";
 import bgSmall from "../../../assets/images/bg-2.png";
 import bgPattern from "../../../assets/images/bg-3.png";
@@ -106,12 +104,7 @@ export default function HadaraSection() {
                 تلامس خصوصية الضيف وتمنحه شعورًا حقيقيًا بالترحيب والانتماء.
               </p>
 
-              <InlineBookingCTA
-                iconSrc={bookingIcon}
-                iconClassName="h-4 w-4 transition group-hover:translate-x-[-4px]"
-                label="احجز الآن"
-                labelClassName="text-[15px] sm:text-[16px]"
-              />
+              <div className="h-[24px]" aria-hidden />
             </div>
           </motion.div>
         </div>

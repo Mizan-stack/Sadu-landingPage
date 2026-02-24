@@ -1,11 +1,9 @@
 import { motion } from "framer-motion";
 
 import FloatingImagePair from "../../common/FloatingImagePair";
-import InlineBookingCTA from "../../common/InlineBookingCTA";
 import PageContainer from "../../common/PageContainer";
 import bigImage from "../../../assets/images/bg-16.png";
 import smallImage from "../../../assets/images/bg-15.png";
-import bookingIcon from "../../../assets/icons/booking-1.png";
 import patternBg from "../../../assets/images/bg-3.png";
 
 export default function VisionSection() {
@@ -69,12 +67,7 @@ export default function VisionSection() {
               معايير الجودة.
             </p>
 
-            <InlineBookingCTA
-              iconSrc={bookingIcon}
-              iconClassName="h-[16px] sm:h-[18px] w-auto transition duration-300 group-hover:translate-x-[-4px]"
-              label="احجز الآن"
-              labelClassName="text-[14px] sm:text-[16px]"
-            />
+            <div className="h-[24px]" aria-hidden />
           </motion.div>
         </div>
       </PageContainer>

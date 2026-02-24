@@ -3,6 +3,8 @@ import PageContainer from "../components/common/PageContainer";
 import bookingIcon from "../assets/icons/booking-1.png";
 import contactImage from "../assets/images/bg-8.png"; // غيرها لو عندك صورة مختلفة
 
+const CONTACT_EMAIL = "info@sduksa.com";
+
 export default function ContactPage() {
   return (
     <div dir="rtl" className="min-h-screen bg-[#F3E0CF]">
@@ -55,6 +57,7 @@ export default function ContactPage() {
                     الاسم <span className="text-red-600">*</span>
                   </label>
                   <input
+                    name="name"
                     type="text"
                     placeholder="مثال: محمد أمين"
                     className="w-full border-b border-[#7A1E2C]/20 bg-transparent py-3 outline-none focus:border-[#7A1E2C] placeholder:text-gray-400"
@@ -67,6 +70,7 @@ export default function ContactPage() {
                     رقم الجوال <span className="text-red-600">*</span>
                   </label>
                   <input
+                    name="phone"
                     type="tel"
                     placeholder="مثال: 1256 123 961"
                     className="w-full border-b border-[#7A1E2C]/20 bg-transparent py-3 outline-none focus:border-[#7A1E2C] placeholder:text-gray-400"
@@ -79,6 +83,7 @@ export default function ContactPage() {
                     بريدك الإلكتروني
                   </label>
                   <input
+                    name="email"
                     type="email"
                     placeholder="username@example.com"
                     className="w-full border-b border-[#7A1E2C]/20 bg-transparent py-3 outline-none focus:border-[#7A1E2C] placeholder:text-gray-400"
@@ -91,12 +96,14 @@ export default function ContactPage() {
                     الرسالة <span className="text-red-600">*</span>
                   </label>
                   <textarea
+                    name="message"
                     rows={4}
                     placeholder="اكتب ما يأتي في خاطرك"
                     className="w-full resize-none border-b border-[#7A1E2C]/20 bg-transparent py-3 outline-none focus:border-[#7A1E2C] placeholder:text-gray-400"
                   />
                 </div>
 
+                {/* TODO: Integrate form submission backend to send messages to CONTACT_EMAIL (info@sduksa.com). */}
                 {/* BUTTON */}
                 <button
                   type="submit"
