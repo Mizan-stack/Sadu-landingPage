@@ -84,7 +84,7 @@ export default function HeroSection() {
               {/* SLIDER */}
               <div className="mt-6 flex w-full flex-row-reverse items-center justify-end gap-3 sm:w-fit sm:gap-4">
                 <button
-                  onClick={prev}
+                  onClick={next}
                   className="text-white/80 transition hover:text-white"
                 >
                   ←
@@ -103,9 +103,8 @@ export default function HeroSection() {
                     />
                   ))}
                 </div>
-
                 <button
-                  onClick={next}
+                  onClick={prev}
                   className="text-white/80 transition hover:text-white"
                 >
                   →
@@ -117,7 +116,7 @@ export default function HeroSection() {
       </div>
 
       {/* فنادقنا */}
-      <div className="pointer-events-none absolute bottom-[120px] left-[20px] sm:left-[60px] z-[4]">
+      <div className="hidden sm:block pointer-events-none absolute bottom-[120px] left-[20px] sm:left-[60px] z-[4]">
         <div className="relative w-[140px] sm:w-[200px] overflow-hidden border border-white/25 bg-black/25 backdrop-blur-sm shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
           <img
             src={fallbackSlides[index]}

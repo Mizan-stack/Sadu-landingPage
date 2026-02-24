@@ -133,16 +133,39 @@ export default function NavBar() {
             <motion.div
               className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+              }}
+              exit={{
+                opacity: 0,
+                transition: { duration: 0.2, ease: [0.4, 0, 1, 1] },
+              }}
               onClick={() => setMenuOpen(false)}
             />
 
             <motion.aside
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 120, damping: 18 }}
+              initial={{ x: "100%", opacity: 0, scale: 0.985 }}
+              animate={{
+                x: 0,
+                opacity: 1,
+                scale: 1,
+                transition: {
+                  x: { type: "spring", stiffness: 240, damping: 34, mass: 0.9 },
+                  opacity: { duration: 0.24, ease: [0.22, 1, 0.36, 1] },
+                  scale: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+                },
+              }}
+              exit={{
+                x: "100%",
+                opacity: 0,
+                scale: 0.99,
+                transition: {
+                  x: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+                  opacity: { duration: 0.18, ease: [0.4, 0, 1, 1] },
+                  scale: { duration: 0.22, ease: [0.4, 0, 1, 1] },
+                },
+              }}
               className="fixed right-0 top-0 z-[100] h-full w-full sm:w-[420px] bg-[#E9DFD2] shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between p-6 border-b border-[#7A1E2C]/10">
@@ -160,9 +183,14 @@ export default function NavBar() {
                   <motion.button
                     key={sec.id}
                     onClick={() => handleSidebarNavigation(sec)}
-                    initial={{ opacity: 0, x: 40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.06 }}
+                    initial={{ opacity: 0, y: 12, x: 24 }}
+                    animate={{ opacity: 1, y: 0, x: 0 }}
+                    exit={{ opacity: 0, y: 8, x: 12 }}
+                    transition={{
+                      delay: i * 0.06,
+                      duration: 0.32,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                     className="text-right text-[22px] font-medium text-[#7A1E2C] py-4 px-4 rounded-lg hover:bg-[#7A1E2C]/5 transition"
                   >
                     {sec.label}
@@ -185,7 +213,8 @@ export default function NavBar() {
           }
         `}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={{ opacity: menuOpen ? 0.98 : 1 }}
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
       >
         <PageContainer className="mx-auto max-w-[1320px] px-4 sm:px-6">
           <div className="relative flex min-h-[72px] sm:min-h-[96px] items-center justify-between">
