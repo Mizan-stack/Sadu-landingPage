@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 
 import PageContainer from "../../common/PageContainer";
@@ -7,6 +7,19 @@ import img2 from "../../../assets/images/bg-8.png";
 import img3 from "../../../assets/images/bg-10.png";
 
 export default function DestinationsSection() {
+  const shouldReduceMotion = useReducedMotion();
+  const dragHintMotionProps = shouldReduceMotion
+    ? {}
+    : {
+        animate: { x: [0, 8, 0], opacity: [0.78, 1, 0.78] },
+        transition: {
+          duration: 2.1,
+          ease: [0.22, 1, 0.36, 1],
+          repeat: Infinity,
+        },
+        whileHover: { x: 0, opacity: 1 },
+      };
+
   const cards = [
     {
       img: img1,
@@ -84,14 +97,17 @@ export default function DestinationsSection() {
                 dragConstraints={{ left: -140, right: 140 }}
                 dragElastic={0.35}
                 onDragEnd={(e, info) => {
-                  if (info.offset.x < -60) handleNext();
-                  if (info.offset.x > 60) handlePrev();
+                  if (info.offset.x > 60) handleNext();
+                  if (info.offset.x < -60) handlePrev();
                 }}
-                className="absolute right-1/2 top-1/2 translate-x-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
+                className="absolute left-6 top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
               >
-                <div className="flex h-[90px] w-[90px] items-center justify-center rounded-full border border-white/70 text-white backdrop-blur-md">
+                <motion.div
+                  {...dragHintMotionProps}
+                  className="flex h-[90px] w-[90px] items-center justify-center rounded-full border border-white/70 text-white backdrop-blur-md"
+                >
                   اسحب
-                </div>
+                </motion.div>
               </motion.div>
             </div>
 
@@ -144,14 +160,17 @@ export default function DestinationsSection() {
                       dragConstraints={{ left: -120, right: 120 }}
                       dragElastic={0.3}
                       onDragEnd={(e, info) => {
-                        if (info.offset.x < -60) handleNext();
-                        if (info.offset.x > 60) handlePrev();
+                        if (info.offset.x > 60) handleNext();
+                        if (info.offset.x < -60) handlePrev();
                       }}
-                      className="absolute right-6 top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
+                      className="absolute left-6 top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
                     >
-                      <div className="flex h-[84px] w-[84px] items-center justify-center rounded-full border border-white/70 text-white backdrop-blur-md transition hover:scale-105">
+                      <motion.div
+                        {...dragHintMotionProps}
+                        className="flex h-[84px] w-[84px] items-center justify-center rounded-full border border-white/70 text-white backdrop-blur-md transition hover:scale-105"
+                      >
                         اسحب
-                      </div>
+                      </motion.div>
                     </motion.div>
                   )}
                 </div>

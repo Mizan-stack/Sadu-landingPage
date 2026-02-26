@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import PageContainer from "../common/PageContainer";
@@ -20,6 +20,10 @@ const sections = [
   { id: "contact", label: "تواصل معنا", route: "/contact" },
 ];
 const PENDING_SCROLL_SECTION_KEY = "pending-scroll-section";
+const MOBILE_MAX_WIDTH = 639;
+const MOBILE_SIDEBAR_CLOSE_DELAY_MS = 320;
+const MOBILE_SCROLL_RETRY_DELAY_MS = 80;
+const MAX_SCROLL_RETRIES = 8;
 
 export default function NavBar() {
   const location = useLocation();
@@ -27,6 +31,60 @@ export default function NavBar() {
   const isHome = location.pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const scrollRetryTimerRef = useRef(null);
+  const sidebarCloseTimerRef = useRef(null);
+
+  const isMobileViewport = () => window.innerWidth <= MOBILE_MAX_WIDTH;
+
+  const clearScheduledScrollTimers = () => {
+    if (scrollRetryTimerRef.current) {
+      window.clearTimeout(scrollRetryTimerRef.current);
+      scrollRetryTimerRef.current = null;
+    }
+
+    if (sidebarCloseTimerRef.current) {
+      window.clearTimeout(sidebarCloseTimerRef.current);
+      sidebarCloseTimerRef.current = null;
+    }
+  };
+
+  const scrollToSectionElement = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return false;
+
+    if (isMobileViewport()) {
+      const top = window.scrollY + el.getBoundingClientRect().top;
+      window.scrollTo({ top, behavior: "smooth" });
+    } else {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+
+    return true;
+  };
+
+  const scrollToSectionWithRetry = (id, attempt = 0, onComplete) => {
+    if (scrollToSectionElement(id)) {
+      onComplete?.(true);
+      return;
+    }
+
+    if (attempt >= MAX_SCROLL_RETRIES) {
+      onComplete?.(false);
+      return;
+    }
+
+    scrollRetryTimerRef.current = window.setTimeout(() => {
+      window.requestAnimationFrame(() => {
+        scrollToSectionWithRetry(id, attempt + 1, onComplete);
+      });
+    }, MOBILE_SCROLL_RETRY_DELAY_MS);
+  };
+
+  useEffect(() => {
+    return () => {
+      clearScheduledScrollTimers();
+    };
+  }, []);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -52,38 +110,50 @@ export default function NavBar() {
       PENDING_SCROLL_SECTION_KEY,
     );
     if (!pendingSection) return;
-    window.sessionStorage.removeItem(PENDING_SCROLL_SECTION_KEY);
+    clearScheduledScrollTimers();
     window.requestAnimationFrame(() => {
-      const el = document.getElementById(pendingSection);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      scrollToSectionWithRetry(pendingSection, 0, () => {
+        window.sessionStorage.removeItem(PENDING_SCROLL_SECTION_KEY);
+      });
     });
   }, [isHome, location.pathname]);
 
-  const goToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+  const goToSection = (id, options = {}) => {
+    const { waitForSidebarClose = false } = options;
+    clearScheduledScrollTimers();
     setMenuOpen(false);
-  };
 
-  const handleSidebarNavigation = (sec) => {
-    if (sec.id === "start-story") {
-      setMenuOpen(false);
-      if (isHome) {
-        goToSection(sec.id);
-      } else {
-        window.sessionStorage.setItem(PENDING_SCROLL_SECTION_KEY, sec.id);
-        navigate("/");
-      }
+    const startScroll = () => {
+      scrollToSectionWithRetry(id);
+    };
+
+    if (waitForSidebarClose && isMobileViewport()) {
+      sidebarCloseTimerRef.current = window.setTimeout(() => {
+        window.requestAnimationFrame(startScroll);
+      }, MOBILE_SIDEBAR_CLOSE_DELAY_MS);
       return;
     }
 
+    startScroll();
+  };
+
+  const handleSidebarNavigation = (sec) => {
     if (sec.route) {
+      clearScheduledScrollTimers();
       setMenuOpen(false);
       navigate(sec.route);
       return;
     }
 
-    goToSection(sec.id);
+    if (!isHome) {
+      clearScheduledScrollTimers();
+      window.sessionStorage.setItem(PENDING_SCROLL_SECTION_KEY, sec.id);
+      setMenuOpen(false);
+      navigate("/");
+      return;
+    }
+
+    goToSection(sec.id, { waitForSidebarClose: true });
   };
 
   // ================= CONTACT NAVBAR =================
