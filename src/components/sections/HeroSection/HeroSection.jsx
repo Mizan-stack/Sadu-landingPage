@@ -1,45 +1,57 @@
-﻿import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+
+import { useContentContext } from "../../../contexts/ContentContext";
 
 import heroImage from "../../../assets/images/hero.png";
 import heroImage2 from "../../../assets/images/bg-10.png";
 import heroImage3 from "../../../assets/images/bg-11.png";
 
-const heroSlides = [heroImage, heroImage2, heroImage3];
-const slides = [...new Set(heroSlides.filter(Boolean))];
-const fallbackSlides = slides.length > 0 ? slides : [heroImage];
-
-const stats = [
+const defaultStats = [
   { value: "24/7", label: "خدمة ضيوف مخصصة" },
   { value: "233+", label: "غرفة وجناح" },
   { value: "5", label: "وجهة بوتيكية" },
 ];
 
 export default function HeroSection() {
+  const { config } = useContentContext();
+  const data = config?.home?.hero;
+
+  const slides =
+    data?.slides?.map((s) => s.imageUrl).filter(Boolean) || [
+      heroImage,
+      heroImage2,
+      heroImage3,
+    ];
+  const activeSlides = slides.length > 0 ? slides : [heroImage];
+  const titleLines = (
+    data?.title || "اختبر الرفاهية كما\nيجب أن تكون"
+  ).split("\n");
+  const stats = data?.stats || defaultStats;
+
   const [index, setIndex] = useState(0);
 
   // autoplay
   useEffect(() => {
     const id = setInterval(() => {
-      setIndex((prev) => (prev + 1) % fallbackSlides.length);
+      setIndex((prev) => (prev + 1) % activeSlides.length);
     }, 4000);
     return () => clearInterval(id);
-  }, []);
+  }, [activeSlides.length]);
 
-  const next = () => setIndex((p) => (p + 1) % fallbackSlides.length);
+  const next = () => setIndex((p) => (p + 1) % activeSlides.length);
   const prev = () =>
-    setIndex((p) => (p - 1 + fallbackSlides.length) % fallbackSlides.length);
+    setIndex((p) => (p - 1 + activeSlides.length) % activeSlides.length);
 
   return (
     <section
-      id="hero"
       dir="rtl"
       className="relative min-h-screen w-full overflow-hidden"
     >
       {/* BG */}
       <motion.img
         key={index}
-        src={fallbackSlides[index]}
+        src={activeSlides[index]}
         alt=""
         aria-hidden
         className="absolute inset-0 z-[1] h-full w-full object-cover"
@@ -62,8 +74,11 @@ export default function HeroSection() {
             className="ml-auto w-full max-w-[820px] text-right"
           >
             <h1 className="test-font-check [font-family:'TS_Zunburk_VF2','IBM_Plex_Sans_Arabic',Tajawal,sans-serif] text-[34px] leading-[1.35] sm:text-[44px] md:text-[80px] lg:text-[80px] font-medium text-[#F3E8DA]">
-              <span className="block">اختبر الرفاهية كما</span>
-              <span className="block">يجب أن تكون</span>
+              {titleLines.map((line, i) => (
+                <span key={i} className="block">
+                  {line}
+                </span>
+              ))}
             </h1>
 
             {/* STATS */}
@@ -91,7 +106,7 @@ export default function HeroSection() {
                 </button>
 
                 <div className="flex items-center gap-2 sm:gap-3">
-                  {fallbackSlides.map((img, i) => (
+                  {activeSlides.map((img, i) => (
                     <img
                       key={i}
                       src={img}
@@ -119,11 +134,13 @@ export default function HeroSection() {
       <div className="hidden sm:block pointer-events-none absolute bottom-[120px] left-[20px] sm:left-[60px] z-[4]">
         <div className="relative w-[140px] sm:w-[200px] overflow-hidden border border-white/25 bg-black/25 backdrop-blur-sm shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
           <img
-            src={fallbackSlides[index]}
+            src={activeSlides[index]}
             alt=""
             className="h-[100px] sm:h-[130px] w-full object-cover opacity-85"
           />
-          <div className="p-3 text-xs text-white/90">فنادقنا</div>
+          <div className="p-3 text-xs text-white/90">
+            {data?.hotelCardText || "فنادقنا"}
+          </div>
           <div className="pointer-events-none absolute left-3 top-3 text-white/80">
             ↓
           </div>

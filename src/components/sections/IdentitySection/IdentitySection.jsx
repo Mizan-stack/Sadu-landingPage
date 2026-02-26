@@ -1,12 +1,20 @@
+import React from "react";
 import { motion } from "framer-motion";
 
+import { useContentContext } from "../../../contexts/ContentContext";
 import mainImage from "../../../assets/images/bg-9.png";
 import patternBg from "../../../assets/images/bg-3.png";
 
-export default function IdentitySection() {
+const defaultBody =
+  "نستمد من عمق التراث السعودي فنون الضيافة الأصيلة، لتجربة فندقية تعكس هويتنا وتمنح ضيوفنا لحظات إقامة لا تُنسى بتجربة وروح سعودية خالصة.\n\nيجمع نموذجنا الفندقي بين مرونة الابتكار ودقة التنفيذ عبر اعتماد أرقى الممارسات التي تحقق النجاح لشركائنا وتمنح ضيوفنا أعلى معايير جودة الإقامة.";
+
+function IdentitySection() {
+  const { config } = useContentContext();
+  const data = config?.home?.identity;
+  const bodyParts = (data?.body ?? defaultBody).split("\n\n");
+
   return (
     <section
-      id="identity"
       dir="rtl"
       className="relative w-full overflow-hidden"
     >
@@ -16,10 +24,12 @@ export default function IdentitySection() {
 
       {/* ===== pattern ===== */}
       <img
-        src={patternBg}
+        src={data?.patternImageUrl || patternBg}
         alt=""
         aria-hidden
         className="pointer-events-none absolute left-0 top-0 z-[1] h-full w-[55%] object-cover opacity-60 mix-blend-multiply"
+        loading="lazy"
+        decoding="async"
       />
 
       {/* ================= CONTAINER ================= */}
@@ -71,7 +81,7 @@ export default function IdentitySection() {
               "
             >
               <img
-                src={mainImage}
+                src={data?.mainImageUrl || mainImage}
                 alt=""
                 className="
                   w-full object-cover
@@ -84,6 +94,8 @@ export default function IdentitySection() {
 
                   shadow-[0_40px_120px_rgba(0,0,0,0.25)]
                 "
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </motion.div>
@@ -115,7 +127,7 @@ export default function IdentitySection() {
                 lg:mb-6 lg:text-[48px]
               "
             >
-              هويتنا أصل ضيافتنا
+              {data?.heading || "هويتنا أصل ضيافتنا"}
             </h2>
 
             <p
@@ -129,14 +141,17 @@ export default function IdentitySection() {
                 lg:mb-8 lg:text-[16px] lg:max-w-[520px]
               "
             >
-              نستمد من عمق التراث السعودي فنون الضيافة الأصيلة، لتجربة فندقية
-              تعكس هويتنا وتمنح ضيوفنا لحظات إقامة لا تُنسى بتجربة وروح سعودية
-              خالصة.
-              <br />
-              <br />
-              يجمع نموذجنا الفندقي بين مرونة الابتكار ودقة التنفيذ عبر اعتماد
-              أرقى الممارسات التي تحقق النجاح لشركائنا وتمنح ضيوفنا أعلى معايير
-              جودة الإقامة.
+              {bodyParts.map((part, i) => (
+                <span key={i}>
+                  {part}
+                  {i < bodyParts.length - 1 && (
+                    <>
+                      <br />
+                      <br />
+                    </>
+                  )}
+                </span>
+              ))}
             </p>
 
             <div className="h-[24px]" aria-hidden />
@@ -146,3 +161,4 @@ export default function IdentitySection() {
     </section>
   );
 }
+export default React.memo(IdentitySection);

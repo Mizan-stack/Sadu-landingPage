@@ -1,37 +1,35 @@
+import React, { useRef } from "react";
 import { motion } from "framer-motion";
-import { useRef } from "react";
 import CardRail from "../../common/CardRail";
+import { useContentContext } from "../../../contexts/ContentContext";
 import heroBg from "../../../assets/images/bg-4.png";
 import card1 from "../../../assets/images/bg-5.png";
 import card2 from "../../../assets/images/bg-6.png";
 import card3 from "../../../assets/images/bg-7.png";
 import card4 from "../../../assets/images/bg-8.png";
 
-const cards = [
-  {
-    img: card1,
-    title: "إقامة متفردة",
-    desc: "خصوصية تامة تحيط بكم وتصميم يعكس الطابع الأصيل والرفاهية.",
-  },
-  {
-    img: card2,
-    title: "كرم الضيافة",
-    desc: "خدمة تُقدَّم بشغف، تُعنى بالتفاصيل لتمنحكم تجربة لا تُنسى.",
-  },
-  {
-    img: card3,
-    title: "جودة السكن",
-    desc: "مساحات ورفاهية عصرية صُممت لتأخذ بكم إلى أقصى درجات الراحة.",
-  },
-  {
-    img: card4,
-    title: "رحابة الاستقبال",
-    desc: "فريق محترف يستقبلكم بروح الضيافة السعودية الأصيلة.",
-  },
-];
+const DEFAULT_DESCRIPTION =
+  "علامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية، مستلهمين من فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها وعمقها.\n\nفلسفة سدو في كمال التفاصيل بدأت من التصاميم المكانية التي تروي قصص الأصالة، وصولًا إلى تجربة إقامة عصرية متفردة.";
 
-export default function ExperienceSection() {
+function ExperienceSection() {
+  const { config } = useContentContext();
+  const data = config?.home?.experience;
   const sliderRef = useRef(null);
+
+  const headingLines = (data?.heading || "على الرحب والقلب\nأوسع من الدار").split("\n");
+  const description = data?.description || DEFAULT_DESCRIPTION;
+  const descriptionParts = description.split("\n");
+
+  const cards = (data?.cards || [
+    { title: "إقامة متفردة", imageUrl: card1, description: "خصوصية تامة تحيط بكم وتصميم يعكس الطابع الأصيل والرفاهية." },
+    { title: "كرم الضيافة", imageUrl: card2, description: "خدمة تُقدَّم بشغف، تُعنى بالتفاصيل لتمنحكم تجربة لا تُنسى." },
+    { title: "جودة السكن", imageUrl: card3, description: "مساحات ورفاهية عصرية صُممت لتأخذ بكم إلى أقصى درجات الراحة." },
+    { title: "رحابة الاستقبال", imageUrl: card4, description: "فريق محترف يستقبلكم بروح الضيافة السعودية الأصيلة." },
+  ]).map((c) => ({
+    img: c.imageUrl || c.img,
+    title: c.title,
+    desc: c.description || c.desc,
+  }));
 
   const scroll = (dir) => {
     if (!sliderRef.current) return;
@@ -45,14 +43,13 @@ export default function ExperienceSection() {
 
   return (
     <section
-      id="experience"
       dir="rtl"
       className="w-full overflow-hidden bg-[#E9DFD2]"
     >
       {/* ================= HERO ================= */}
       <div className="relative h-[620px] sm:h-[800px] w-full overflow-hidden">
         <motion.img
-          src={heroBg}
+          src={data?.backgroundImageUrl || heroBg}
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
           initial={{ scale: 1 }}
@@ -86,17 +83,21 @@ export default function ExperienceSection() {
               font-medium leading-[1.3]
             "
             >
-              على الرحب والقلب
-              <br />
-              أوسع من الدار
+              {headingLines.map((line, i) => (
+                <React.Fragment key={i}>
+                  {line}
+                  {i < headingLines.length - 1 && <br />}
+                </React.Fragment>
+              ))}
             </h2>
 
             <p className="text-[13px] sm:text-[15px] leading-[2] text-white/85">
-              علامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية، مستلهمين
-              من فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها وعمقها.
-              <br />
-              فلسفة سدو في كمال التفاصيل بدأت من التصاميم المكانية التي تروي قصص
-              الأصالة، وصولًا إلى تجربة إقامة عصرية متفردة.
+              {descriptionParts.map((part, i) => (
+                <React.Fragment key={i}>
+                  {part}
+                  {i < descriptionParts.length - 1 && <br />}
+                </React.Fragment>
+              ))}
             </p>
           </motion.div>
         </div>
@@ -111,3 +112,4 @@ export default function ExperienceSection() {
     </section>
   );
 }
+export default React.memo(ExperienceSection);

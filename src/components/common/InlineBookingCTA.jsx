@@ -12,7 +12,7 @@ export default function InlineBookingCTA({
   if (href) {
     return (
       <a className={buttonClassName} href={href} target={target} rel={rel}>
-        <img src={iconSrc} alt="" className={iconClassName} />
+        <img src={iconSrc} alt="" className={iconClassName} loading="lazy" decoding="async" />
         <span className={labelClassName}>{label}</span>
       </a>
     );
@@ -20,7 +20,7 @@ export default function InlineBookingCTA({
 
   return (
     <button className={buttonClassName} onClick={onClick}>
-      <img src={iconSrc} alt="" className={iconClassName} />
+      <img src={iconSrc} alt="" className={iconClassName} loading="lazy" decoding="async" />
       <span className={labelClassName}>{label}</span>
     </button>
   );

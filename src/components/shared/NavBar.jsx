@@ -9,21 +9,33 @@ import mainTitleLogo from "../../assets/icons/main-title.png";
 import mainTitleSidebar from "../../assets/icons/main-title-3.png";
 import menuIcon from "../../assets/icons/menu.png";
 import phoneIcon from "../../assets/icons/phone.png";
+import { useContentContext } from "../../contexts/ContentContext";
 import { BOOKING_URL, UNIFIED_PHONE_NUMBER } from "../../constants/siteConfig";
 
-const sections = [
-  { id: "hero", label: "الرئيسية" },
-  { id: "experience", label: "التجربة" },
-  { id: "destinations", label: "الوجهات" },
-  { id: "heritage", label: "الثقافة" },
-  { id: "start-story", label: "الحجوزات" },
-  { id: "contact", label: "تواصل معنا", route: "/contact" },
-];
 const PENDING_SCROLL_SECTION_KEY = "pending-scroll-section";
 
 export default function NavBar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { config } = useContentContext();
+  const global = config?.global;
+
+  const navItems =
+    global?.nav ||
+    [
+      { id: "hero", label: "الرئيسية", target: "hero" },
+      { id: "experience", label: "التجربة", target: "experience" },
+      { id: "destinations", label: "الوجهات", target: "destinations" },
+      { id: "heritage", label: "الثقافة", target: "heritage" },
+      { id: "start-story", label: "الحجوزات", target: "start-story" },
+      {
+        id: "contact",
+        label: "تواصل معنا",
+        target: "contact",
+        route: "/contact",
+      },
+    ];
+
   const isHome = location.pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -66,24 +78,23 @@ export default function NavBar() {
   };
 
   const handleSidebarNavigation = (sec) => {
-    if (sec.id === "start-story") {
+    const scrollTarget = sec.target ?? sec.id;
+    if (scrollTarget === "start-story") {
       setMenuOpen(false);
       if (isHome) {
-        goToSection(sec.id);
+        goToSection(scrollTarget);
       } else {
-        window.sessionStorage.setItem(PENDING_SCROLL_SECTION_KEY, sec.id);
+        window.sessionStorage.setItem(PENDING_SCROLL_SECTION_KEY, scrollTarget);
         navigate("/");
       }
       return;
     }
-
     if (sec.route) {
       setMenuOpen(false);
       navigate(sec.route);
       return;
     }
-
-    goToSection(sec.id);
+    goToSection(scrollTarget);
   };
 
   // ================= CONTACT NAVBAR =================
@@ -94,28 +105,30 @@ export default function NavBar() {
           <div className="flex min-h-[80px] items-center justify-between text-white">
             {/* RIGHT */}
             <a
-              href={BOOKING_URL}
+              href={global?.bookNowLink || BOOKING_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:flex items-center gap-3"
             >
-              <span>احجز الآن</span>
-              <img src={bookingIconAlt} className="h-5 invert" />
+              <span>{global?.bookNowText || "احجز الآن"}</span>
+              <img src={bookingIconAlt} className="h-5 invert" loading="lazy" decoding="async" alt="" />
             </a>
 
             {/* CENTER */}
             <Link to="/">
               <img
-                src={mainTitleLogo}
+                src={global?.logoUrl || mainTitleLogo}
                 className="w-[160px] sm:w-[200px]"
                 alt="logo"
+                loading="lazy"
+                decoding="async"
               />
             </Link>
 
             {/* LEFT (CHANGED) */}
             <Link to="/" className="flex items-center gap-3">
               <span>الصفحة الرئيسية</span>
-              <img src={menuIcon} className="h-5 invert" />
+              <img src={menuIcon} className="h-5 invert" loading="lazy" decoding="async" alt="" />
             </Link>
           </div>
         </PageContainer>
@@ -169,7 +182,7 @@ export default function NavBar() {
               className="fixed right-0 top-0 z-[100] h-full w-full sm:w-[420px] bg-[#E9DFD2] shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between p-6 border-b border-[#7A1E2C]/10">
-                <img src={mainTitleSidebar} className="w-[140px]" />
+                <img src={global?.sidebarLogoUrl || mainTitleSidebar} className="w-[140px]" alt="" loading="lazy" decoding="async" />
                 <button
                   onClick={() => setMenuOpen(false)}
                   className="text-[#7A1E2C] text-2xl"
@@ -179,7 +192,7 @@ export default function NavBar() {
               </div>
 
               <div className="flex flex-col gap-2 p-6">
-                {sections.map((sec, i) => (
+                {navItems.map((sec, i) => (
                   <motion.button
                     key={sec.id}
                     onClick={() => handleSidebarNavigation(sec)}
@@ -223,38 +236,42 @@ export default function NavBar() {
               onClick={() => setMenuOpen(true)}
               className="flex items-center gap-3 text-white cursor-pointer"
             >
-              <img src={menuIcon} className="h-5" />
+              <img src={menuIcon} className="h-5" alt="" loading="lazy" decoding="async" />
               <span className="text-[14px] sm:text-base">قائمة</span>
 
               <div className="hidden sm:flex items-center gap-3">
-                <img src={phoneIcon} className="h-5" />
-                <span>{UNIFIED_PHONE_NUMBER}</span>
+                <img src={phoneIcon} className="h-5" alt="" loading="lazy" decoding="async" />
+                <span>{global?.phone || UNIFIED_PHONE_NUMBER}</span>
               </div>
             </div>
 
             {/* CENTER LOGO */}
             <img
-              src={mainTitleLogo}
+              src={global?.logoUrl || mainTitleLogo}
               alt="logo"
               className="pointer-events-none absolute left-1/2 hidden sm:block w-[200px] -translate-x-1/2"
+              loading="lazy"
+              decoding="async"
             />
 
             {/* RIGHT */}
             <a
-              href={BOOKING_URL}
+              href={global?.bookNowLink || BOOKING_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:flex items-center gap-3 text-white"
             >
-              <span>احجز الآن</span>
-              <img src={bookingIcon} className="h-5" />
+              <span>{global?.bookNowText || "احجز الآن"}</span>
+              <img src={bookingIcon} className="h-5" alt="" loading="lazy" decoding="async" />
             </a>
 
             {/* MOBILE LOGO */}
             <img
-              src={mainTitleLogo}
+              src={global?.logoUrl || mainTitleLogo}
               alt="logo"
               className="w-[120px] sm:hidden"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </PageContainer>

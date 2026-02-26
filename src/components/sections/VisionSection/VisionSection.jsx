@@ -1,24 +1,30 @@
+import React from "react";
 import { motion } from "framer-motion";
 
+import { useContentContext } from "../../../contexts/ContentContext";
 import FloatingImagePair from "../../common/FloatingImagePair";
 import PageContainer from "../../common/PageContainer";
 import bigImage from "../../../assets/images/bg-16.png";
 import smallImage from "../../../assets/images/bg-15.png";
 import patternBg from "../../../assets/images/bg-3.png";
 
-export default function VisionSection() {
+function VisionSection() {
+  const { config } = useContentContext();
+  const data = config?.home?.vision;
+
   return (
     <section
-      id="vision"
       dir="rtl"
       className="relative w-full overflow-hidden bg-[#F3E0CF]"
     >
       {/* subtle pattern right */}
       <img
-        src={patternBg}
+        src={data?.patternImageUrl || patternBg}
         alt=""
         aria-hidden
         className="pointer-events-none absolute right-0 top-0 z-[1] h-full w-[40%] object-cover opacity-40"
+        loading="lazy"
+        decoding="async"
       />
 
       <PageContainer className="relative z-[2] mx-auto max-w-[1320px] px-4 sm:px-6 py-[70px] sm:py-[120px]">
@@ -32,7 +38,7 @@ export default function VisionSection() {
             className="relative w-full order-1 lg:order-2"
           >
             <FloatingImagePair
-              bigImageSrc={bigImage}
+              bigImageSrc={data?.mainImageUrl || bigImage}
               bigImageClassName="w-full max-w-[620px] object-cover"
               smallWrapperClassName="
                 absolute 
@@ -44,7 +50,7 @@ export default function VisionSection() {
                 bg-white
                 shadow-[0_20px_50px_rgba(0,0,0,0.25)]
               "
-              smallImageSrc={smallImage}
+              smallImageSrc={data?.smallImageUrl || smallImage}
               smallImageClassName="h-auto w-full object-cover"
             />
           </motion.div>
@@ -58,13 +64,11 @@ export default function VisionSection() {
             className="text-right order-2 lg:order-1 mt-[40px] lg:mt-0"
           >
             <h2 className="mb-5 text-[30px] sm:text-[48px] font-medium text-[#7A1E2C]">
-              رؤيتنا
+              {data?.heading || "رؤيتنا"}
             </h2>
 
             <p className="mb-6 sm:mb-8 max-w-[520px] text-[14px] sm:text-[16px] leading-[2] text-[#6B5B4D]">
-              أن تكون الوجهة الملهمة في قطاع الضيافة، عبر تقديم تجربة إقامة
-              ترتكز على الاعتزاز بإرثنا الأصيل، وتجسد وعدنا الدائم لضيوفنا بأعلى
-              معايير الجودة.
+              {data?.body || "أن تكون الوجهة الملهمة في قطاع الضيافة، عبر تقديم تجربة إقامة ترتكز على الاعتزاز بإرثنا الأصيل، وتجسد وعدنا الدائم لضيوفنا بأعلى معايير الجودة."}
             </p>
 
             <div className="h-[24px]" aria-hidden />
@@ -74,3 +78,4 @@ export default function VisionSection() {
     </section>
   );
 }
+export default React.memo(VisionSection);

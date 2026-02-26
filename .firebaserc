@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "sduksa"
+  },
+  "targets": {
+    "sduksa": {
+      "hosting": {
+        "dashboard": [
+          "admin-sduksa"
+        ],
+        "website": [
+          "sduksa"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

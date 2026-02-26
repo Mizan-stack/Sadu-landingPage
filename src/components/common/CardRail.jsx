@@ -31,6 +31,8 @@ export default function CardRail({ cards, sliderRef, onNext, onPrev }) {
                 src={card.img}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
               />
 
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0.7)_100%)]" />

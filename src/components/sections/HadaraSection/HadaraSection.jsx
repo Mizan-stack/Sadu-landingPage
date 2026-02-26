@@ -1,23 +1,33 @@
+import React from "react";
 import { motion } from "framer-motion";
 import FloatingImagePair from "../../common/FloatingImagePair";
 import PageContainer from "../../common/PageContainer";
 import TopFrameOrnament from "../../common/TopFrameOrnament";
+import { useContentContext } from "../../../contexts/ContentContext";
 import titleIcon from "../../../assets/icons/main-title-2.png";
 import topFrame from "../../../assets/icons/fram.png";
 import bgMain from "../../../assets/images/bg-1.png";
 import bgSmall from "../../../assets/images/bg-2.png";
 import bgPattern from "../../../assets/images/bg-3.png";
 
-export default function HadaraSection() {
+const INTRO_FALLBACK =
+  "علامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية، مستلهمين من فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها وعمقها.\nعلامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية، مستلهمين من فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها وعمقها.";
+
+const BODY_FALLBACK =
+  "علامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية، مستلهمين من فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها وعمقها.\nتحت مظلة علامة سدو، تتجسد التصاميم المكانية التي تروي قصص الأصالة، وصولًا إلى تجربة إقامة عصرية متفردة، لتكون العلامة التي تلامس خصوصية الضيف وتمنحه شعورًا حقيقيًا بالترحيب والانتماء.";
+
+function HadaraSection() {
+  const { config } = useContentContext();
+  const data = config?.home?.hadara;
+
   return (
     <section
-      id="hadara"
       dir="rtl"
       className="relative w-full overflow-hidden bg-[#F3E0CF]"
     >
       {/* ===== TOP FULL WIDTH FRAME ===== */}
       <TopFrameOrnament
-        src={topFrame}
+        src={data?.ornamentUrl || topFrame}
         ariaHidden
         className="w-full object-cover"
       />
@@ -32,17 +42,15 @@ export default function HadaraSection() {
           className="mx-auto mb-[60px] sm:mb-[80px] max-w-[720px] text-center"
         >
           <img
-            src={titleIcon}
+            src={data?.titleIconUrl || titleIcon}
             alt="حضارة حيّة"
             className="mx-auto mb-6 h-auto w-[180px] sm:w-[220px]"
+            loading="lazy"
+            decoding="async"
           />
 
-          <p className="mx-auto max-w-[640px] text-[14px] sm:text-[16px] leading-[2] text-[#6B5B4D]">
-            علامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية، مستلهمين من
-            فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها وعمقها.
-            <br />
-            علامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية، مستلهمين من
-            فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها وعمقها.
+          <p className="mx-auto max-w-[640px] whitespace-pre-line text-[14px] sm:text-[16px] leading-[2] text-[#6B5B4D]">
+            {data?.introText ?? INTRO_FALLBACK}
           </p>
         </motion.div>
 
@@ -57,7 +65,7 @@ export default function HadaraSection() {
             className="relative w-full order-1 lg:order-2"
           >
             <FloatingImagePair
-              bigImageSrc={bgMain}
+              bigImageSrc={data?.mainImageUrl || bgMain}
               bigImageClassName="w-full max-w-[640px] object-cover"
               smallWrapperClassName="
     absolute 
@@ -68,7 +76,7 @@ export default function HadaraSection() {
     bg-white
     shadow-[0_25px_60px_rgba(0,0,0,0.25)]
   "
-              smallImageSrc={bgSmall}
+              smallImageSrc={data?.smallImageUrl || bgSmall}
               smallImageClassName="h-auto w-full object-cover"
             />
           </motion.div>
@@ -83,25 +91,21 @@ export default function HadaraSection() {
           >
             {/* pattern */}
             <img
-              src={bgPattern}
+              src={data?.patternImageUrl || bgPattern}
               alt=""
               aria-hidden
               className="pointer-events-none absolute right-0 top-1/2 z-0 w-[260px] sm:w-[520px] -translate-y-1/2 opacity-40"
+              loading="lazy"
+              decoding="async"
             />
 
             <div className="relative z-[2]">
               <h2 className="mb-6 text-[32px] sm:text-[44px] font-medium text-[#7A1E2C]">
-                هوية نعتز بها
+                {data?.heading ?? "هوية نعتز بها"}
               </h2>
 
-              <p className="mb-8 max-w-[520px] text-[14px] sm:text-[16px] leading-[2] text-[#6B5B4D]">
-                علامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية،
-                مستلهمين من فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها
-                وعمقها.
-                <br />
-                تحت مظلة علامة سدو، تتجسد التصاميم المكانية التي تروي قصص
-                الأصالة، وصولًا إلى تجربة إقامة عصرية متفردة، لتكون العلامة التي
-                تلامس خصوصية الضيف وتمنحه شعورًا حقيقيًا بالترحيب والانتماء.
+              <p className="mb-8 max-w-[520px] whitespace-pre-line text-[14px] sm:text-[16px] leading-[2] text-[#6B5B4D]">
+                {data?.body ?? BODY_FALLBACK}
               </p>
 
               <div className="h-[24px]" aria-hidden />
@@ -112,3 +116,4 @@ export default function HadaraSection() {
     </section>
   );
 }
+export default React.memo(HadaraSection);

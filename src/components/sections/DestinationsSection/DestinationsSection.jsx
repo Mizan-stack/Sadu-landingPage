@@ -1,28 +1,19 @@
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 
 import PageContainer from "../../common/PageContainer";
+import { useContentContext } from "../../../contexts/ContentContext";
 import img1 from "../../../assets/images/bg-11.png";
 import img2 from "../../../assets/images/bg-8.png";
 import img3 from "../../../assets/images/bg-10.png";
 
-export default function DestinationsSection() {
-  const cards = [
-    {
-      img: img1,
-      title: "سدو بوتيك الخبر",
-      desc: "مساحة مصممة للهدوء وخصوصية الإقامة.",
-    },
-    {
-      img: img2,
-      title: "سدو بوتيك الرياض",
-      desc: "مساحة مصممة للهدوء حيث يلتقي التصميم المعاصر مع خصوصية الإقامة.",
-    },
-    {
-      img: img3,
-      title: "سدو بوتيك المدينة",
-      desc: "مساحة مصممة للهدوء حيث يلتقي التصميم المعاصر مع خصوصية الإقامة.",
-    },
+function DestinationsSection() {
+  const { config } = useContentContext();
+  const data = config?.home?.destinations;
+  const cards = data?.cards || [
+    { name: "سدو بوتيك الخبر", imageUrl: img1, description: "مساحة مصممة للهدوء وخصوصية الإقامة." },
+    { name: "سدو بوتيك الرياض", imageUrl: img2, description: "مساحة مصممة للهدوء حيث يلتقي التصميم المعاصر مع خصوصية الإقامة." },
+    { name: "سدو بوتيك المدينة", imageUrl: img3, description: "مساحة مصممة للهدوء حيث يلتقي التصميم المعاصر مع خصوصية الإقامة." },
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -37,7 +28,6 @@ export default function DestinationsSection() {
 
   return (
     <section
-      id="destinations"
       dir="rtl"
       className="w-full overflow-hidden bg-[#E9DFD2] py-[80px] sm:py-[110px]"
     >
@@ -58,7 +48,7 @@ export default function DestinationsSection() {
             sm:mb-12 sm:text-[44px]
           "
         >
-          اختر وجهتك
+          {data?.heading || "اختر وجهتك"}
         </motion.h2>
 
         {/* ================= MOBILE ================= */}
@@ -73,9 +63,11 @@ export default function DestinationsSection() {
             {/* image */}
             <div className="relative overflow-hidden bg-black">
               <img
-                src={cards[activeIndex].img}
-                alt={cards[activeIndex].title}
+                src={cards[activeIndex].imageUrl}
+                alt={cards[activeIndex].name}
                 className="h-[460px] w-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
 
               {/* drag circle */}
@@ -103,10 +95,10 @@ export default function DestinationsSection() {
               className="mt-5 text-center"
             >
               <h3 className="mb-2 text-[22px] font-medium text-[#7A1E2C]">
-                {cards[activeIndex].title}
+                {cards[activeIndex].name}
               </h3>
               <p className="text-[14px] leading-[1.9] text-[#6B5B4D]">
-                {cards[activeIndex].desc}
+                {cards[activeIndex].description}
               </p>
             </motion.div>
           </motion.div>
@@ -131,11 +123,13 @@ export default function DestinationsSection() {
               >
                 <div className="relative overflow-hidden bg-black">
                   <img
-                    src={card.img}
-                    alt={card.title}
+                    src={card.imageUrl}
+                    alt={card.name}
                     className={`w-full object-cover transition duration-700 group-hover:scale-105 ${
                       isActive ? "h-[460px]" : "h-[420px]"
                     }`}
+                    loading="lazy"
+                    decoding="async"
                   />
 
                   {isActive && (
@@ -166,10 +160,10 @@ export default function DestinationsSection() {
                     className="mt-5 text-right"
                   >
                     <h3 className="mb-2 text-[22px] font-medium text-[#7A1E2C]">
-                      {card.title}
+                      {card.name}
                     </h3>
                     <p className="text-[14px] leading-[1.9] text-[#6B5B4D]">
-                      {card.desc}
+                      {card.description}
                     </p>
                   </motion.div>
                 </AnimatePresence>
@@ -181,3 +175,4 @@ export default function DestinationsSection() {
     </section>
   );
 }
+export default React.memo(DestinationsSection);

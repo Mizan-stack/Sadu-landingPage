@@ -1,20 +1,29 @@
+import React, { Fragment } from "react";
 import { motion } from "framer-motion";
 
 import PageContainer from "../../common/PageContainer";
 import TopFrameOrnament from "../../common/TopFrameOrnament";
+import { useContentContext } from "../../../contexts/ContentContext";
 import topFrame from "../../../assets/icons/fram.png";
 import img1 from "../../../assets/images/bg-12.png";
 import img2 from "../../../assets/images/bg-13.png";
 import img3 from "../../../assets/images/bg-14.png";
 
-export default function HeritageSection() {
-  const images = [img1, img2, img3];
+const DEFAULT_BODY =
+  "علامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية، مستلهمين من فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها وعمقها.\n\nتُجسد فلسفة سدو في كمال التفاصيل بدءًا من التصاميم المكانية التي تروي قصص الأصالة، وصولًا إلى تجربة إقامة عصرية متفردة، لتكون العلامة التي تمنح الضيف شعورًا حقيقيًا بالترحيب والانتماء.";
+
+function HeritageSection() {
+  const { config } = useContentContext();
+  const data = config?.home?.heritage;
+  const bodyText = data?.body || DEFAULT_BODY;
+  const bodyParts = bodyText.split("\n\n");
+  const images = data?.images?.map((i) => i.imageUrl) || [img1, img2, img3];
 
   return (
-    <section id="heritage" dir="rtl" className="w-full overflow-hidden bg-[#F3E0CF]">
+    <section dir="rtl" className="w-full overflow-hidden bg-[#F3E0CF]">
       {/* ===== top ornament ===== */}
       <TopFrameOrnament
-        src={topFrame}
+        src={data?.ornamentUrl || topFrame}
         className="pointer-events-none w-full object-cover opacity-70"
       />
 
@@ -30,7 +39,7 @@ export default function HeritageSection() {
             transition={{ duration: 0.6 }}
             className="mb-4 text-[32px] font-medium text-[#7A1E2C]"
           >
-            ثقافة تاريخية
+            {data?.heading || "ثقافة تاريخية"}
           </motion.h2>
 
           <motion.p
@@ -40,13 +49,17 @@ export default function HeritageSection() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mx-auto max-w-[520px] text-[14px] leading-[2.1] text-[#6B5B4D]"
           >
-            علامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية، مستلهمين من
-            فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها وعمقها.
-            <br />
-            <br />
-            تُجسد فلسفة سدو في كمال التفاصيل بدءًا من التصاميم المكانية التي
-            تروي قصص الأصالة، وصولًا إلى تجربة إقامة عصرية متفردة، لتكون العلامة
-            التي تمنح الضيف شعورًا حقيقيًا بالترحيب والانتماء.
+            {bodyParts.map((part, i) => (
+              <Fragment key={i}>
+                {part}
+                {i < bodyParts.length - 1 && (
+                  <>
+                    <br />
+                    <br />
+                  </>
+                )}
+              </Fragment>
+            ))}
           </motion.p>
         </div>
 
@@ -59,7 +72,7 @@ export default function HeritageSection() {
             transition={{ duration: 0.7 }}
             className="text-right text-[48px] font-medium text-[#7A1E2C]"
           >
-            ثقافة تاريخية
+            {data?.heading || "ثقافة تاريخية"}
           </motion.h2>
 
           <motion.p
@@ -69,13 +82,17 @@ export default function HeritageSection() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="max-w-[620px] text-right leading-[2.1] text-[#6B5B4D] lg:mx-auto"
           >
-            علامة ضيافة سعودية تأسست لترتقي بمفهوم الإقامة الفندقية، مستلهمين من
-            فن السدو دقة نسيجه، ومن الأرض السعودية ثباتها وعمقها.
-            <br />
-            <br />
-            تُجسد فلسفة سدو في كمال التفاصيل بدءًا من التصاميم المكانية التي
-            تروي قصص الأصالة، وصولًا إلى تجربة إقامة عصرية متفردة، لتكون العلامة
-            التي تمنح الضيف شعورًا حقيقيًا بالترحيب والانتماء.
+            {bodyParts.map((part, i) => (
+              <Fragment key={i}>
+                {part}
+                {i < bodyParts.length - 1 && (
+                  <>
+                    <br />
+                    <br />
+                  </>
+                )}
+              </Fragment>
+            ))}
           </motion.p>
         </div>
 
@@ -92,7 +109,7 @@ export default function HeritageSection() {
               transition={{ duration: 0.5, delay: index * 0.08 }}
               className="overflow-hidden bg-black"
             >
-              <img src={img} alt="" className="h-[220px] w-full object-cover" />
+              <img src={img} alt="" className="h-[220px] w-full object-cover" loading="lazy" decoding="async" />
             </motion.div>
           ))}
         </div>
@@ -112,6 +129,8 @@ export default function HeritageSection() {
                 src={img}
                 alt=""
                 className="h-[520px] w-full object-cover transition duration-700 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
               />
             </motion.div>
           ))}
@@ -120,3 +139,4 @@ export default function HeritageSection() {
     </section>
   );
 }
+export default React.memo(HeritageSection);

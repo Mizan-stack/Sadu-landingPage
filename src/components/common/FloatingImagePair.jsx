@@ -7,9 +7,9 @@ export default function FloatingImagePair({
 }) {
   return (
     <>
-      <img src={bigImageSrc} alt="" className={bigImageClassName} />
+      <img src={bigImageSrc} alt="" className={bigImageClassName} loading="lazy" decoding="async" />
       <div className={smallWrapperClassName}>
-        <img src={smallImageSrc} alt="" className={smallImageClassName} />
+        <img src={smallImageSrc} alt="" className={smallImageClassName} loading="lazy" decoding="async" />
       </div>
     </>
   );

@@ -11,6 +11,15 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+
+# Secrets and keys (never commit)
+sduksa-key.json
+*-key.json
+*.pem
+
+# Firebase build cache
+.firebase
 
 # Editor directories and files
 .vscode/*
