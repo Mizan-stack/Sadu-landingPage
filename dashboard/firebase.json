@@ -1,0 +1,9 @@
+{
+  "hosting": [
+    {
+      "site": "admin-sduksa",
+      "public": "dist",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    }
+  ]
+}

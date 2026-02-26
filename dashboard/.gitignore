@@ -1,0 +1,30 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+dist-ssr
+
+# Environment and secrets (never commit)
+.env
+.env.local
+.env.*.local
+*-key.json
+*serviceAccount*.json
+*firebase-adminsdk*.json
+sduksa-key.json
+*.pem
+
+# Firebase build cache
+.firebase
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Editor
+.vscode
+.idea
+.DS_Store

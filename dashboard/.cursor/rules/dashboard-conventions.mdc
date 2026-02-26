@@ -1,0 +1,12 @@
+---
+description: SDU Boutique dashboard – Firestore integration and conventions
+alwaysApply: true
+---
+
+# Dashboard Conventions
+
+- **Content source:** All website content is stored in Firestore. The dashboard edits Firestore; the website reads it. Do not add hardcoded copy; use the schema in `docs/FIRESTORE_SCHEMA.md`.
+- **Same Firebase project:** Website and dashboard use one Firebase project. Firestore paths use `sites/{siteId}/...`. Section IDs must match the website (e.g. `hero`, `hadara`, `contact`).
+- **Types:** Use TypeScript types from `src/types/content.ts` (or equivalent) for all Firestore reads/writes.
+- **Security:** No secrets in repo; use env vars. Firestore rules: public read for content; write only when `request.auth != null`.
+- **Quality:** No silent catches; validate before save; show loading and success/error feedback. Support RTL for Arabic.

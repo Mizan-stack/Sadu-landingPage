@@ -1,0 +1,14 @@
+rules_version = '2';
+// Firestore rules for SDU Boutique (website + dashboard).
+// Website: read-only. Dashboard: write when authenticated.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Single config doc – website reads; dashboard writes when signed in.
+    match /sites/sdu-boutique/config/{configDoc} {
+      allow read: if true;
+      // Optional: restrict to admins via custom claim: request.auth.token.admin == true
+      allow write: if request.auth != null;
+    }
+  }
+}
